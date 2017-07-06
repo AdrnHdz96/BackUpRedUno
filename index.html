@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+Demo creado por Ernesto Hernández.
+Fecha de creación: 25/06/2017
+-->
+<html ng-app="index">
+    <head>
+        <title>Ingeniería</title>
+        <meta charset="UTF-8">
+        <!--Vendors-->
+        <script type="text/javascript" src="js/vendors/jQuery.js"></script>       
+        <script type="text/javascript" src="js/vendors/angular.js"></script>       
+        <script type="text/javascript" src="js/vendors/bootstrap.js"></script>       
+        <script type="text/javascript" src="js/vendors/bootstrap-notify.js" ></script>
+        <!--App-->        
+        <script type="text/javascript" src="js/app/index.js" ></script>
+        <!--Css-->        
+        <link href="css/vendors/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="css/vendors/animate.css" rel="stylesheet" type="text/css"/>
+        <link href="css/app/home.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body id='main' class="mainFull" ng-controller="indexController as index">
+
+        <nav class="navbar navbar-default" style="padding-top: 10px; padding-bottom: 10px;">
+            <div class="container-fluid">
+
+                <div class="navbar-header">                        
+                    <a class="navbar-brand" href="#">Ingeniería Regional</a>
+                </div>
+
+
+
+                <div class="navbar-form navbar-right">
+                    <div class="form-group">
+                        <input ng-keyup="$event.keyCode == 13 ? index.login.enviar() : null" ng-model="index.login.usuario" type="text" class="form-control" placeholder="Usuario">
+                        <input ng-keyup="$event.keyCode == 13 ? index.login.enviar() : null" ng-model="index.login.contrasena" type="password" class="form-control" placeholder="Contraseña">
+                    </div>
+                    <button ng-click="index.login.enviar()" class="btn btn-default">Entrar</button>
+                </div>
+
+                <div class="navbar-form navbar-right">
+                    <img width="180" src="img/tec.png" alt=""/>
+                </div>
+
+            </div>
+        </nav> 
+        <div class="container-fluid" >
+        </div>
+    </body>
+</html>

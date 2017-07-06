@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+Demo creado por Ernesto Hernández.
+Fecha de creación: 25/06/2017
+-->
+<html ng-app="home">
+    <head>
+        <title>Ingeniería</title>
+        <meta charset="UTF-8">
+        <!--Vendors-->
+        <script type="text/javascript" src="../js/vendors/jQuery.js"></script>       
+        <script type="text/javascript" src="../js/vendors/angular.js"></script>       
+        <script src="../js/vendors/ui-grid-stable.js" type="text/javascript"></script>
+        <script type="text/javascript" src="../js/vendors/bootstrap.js"></script>       
+        <script type="text/javascript" src="../js/vendors/bootstrap-notify.js" ></script>
+        <script type="text/javascript" src="../js/vendors/Chart.js"></script>
+        <!--App-->        
+        <script type="text/javascript" src="../js/app/home.js" ></script>
+        <link href="../css/app/home.css" rel="stylesheet" type="text/css"/>
+        <!--Css-->        
+        <link href="../css/vendors/ui-grid-stable.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/vendors/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/vendors/animate.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/vendors/simple-sidebar.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body id='main' class="main" ng-controller="indexHome as home">
+        <div ng-show="home.mostrar" class="container-fluid">
+
+            <div id="wrapper" class="toggled">
+                <!-- Sidebar -->
+                <div id="sidebar-wrapper">
+                    <div class="col-md-12 text-center">
+                        <div class="col-md-12" style="padding-top: 15px;">
+                            <label style="font-size: 1.5em; color: white;">Menú</label>
+                        </div>
+                    </div>
+
+                    <div ng-click="home.app.cambioPantalla(0)" id="menuDG" class="col-md-12 text-center menuItem selected">
+                        <div class="col-md-12" style="padding-top: 10px;">
+                            <label class="letrasMenu" style="font-size: 1.5em">Datos Generales</label>
+                        </div>
+                    </div>
+
+                    <div ng-click="home.app.cambioPantalla(1)" id="menuST"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
+                        <div class="col-md-12" style="padding-top: 10px;">
+                            <label class="letrasMenu" style="font-size: 1.5em">Servicios por Tecnología</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center"  style="margin-top: 480px;">
+                        <img width="180" src="../img/v3m.png">
+                    </div>
+                </div>
+                <!-- /#sidebar-wrapper -->
+
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+
+                            <div style="padding-top: 15px;" class="navbar-header navbar-left">
+                                <span ng-click="home.app.menu()" class="glyphicon glyphicon-menu-hamburger icono"></span>
+                            </div>
+
+                            <div class="navbar-form navbar-right">                                
+                                <button ng-click="home.app.cerrarSesion()" class="btn btn-primary">Cerrar sesión</button>
+                            </div>
+
+                            <div style="padding-top: 10px;" class="navbar-form navbar-right">
+                                <span style="color: blue;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                <label>
+                                    {{home.app.datosGenerales.usuario.nombre + " " + home.app.datosGenerales.usuario.apeido}}
+                                </label>
+                            </div>
+
+                        </div>
+                    </nav> 
+
+                    <div ng-show="home.app.pantalla == 0" class="col-md-12 text-center" id="general">
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                <label>Proyectos en el año (Por mes, totales): <label class="letrasTotales">{{home.app.totalGeneral}}</label> </label>
+                                <canvas id="pieGeneral"></canvas>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <label>Proyectos en el año (Por región, totales): <label class="letrasTotales">{{home.app.totalGeneralRegion}}</label></label>
+                                <canvas id="pieGeneralRegion"></canvas>
+                            </div>
+                        </div>
+                        <div class="row text-center " style="padding-top: 55px;">
+
+                            <div class="col-md-6 text-center">
+                                <label>Proyectos en el año (Por status, totales): <label class="letrasTotales">{{home.app.totalGeneralStatus}}</label></label>
+                                <canvas id="pieGeneralStatus"></canvas>
+                            </div>
+
+                            <div ng-show="home.app.mostrarRegionStatus == true" class="col-md-6 text-center">
+                                <label>Proyectos en el año (Por región, {{home.app.regionStatus}}): <label class="letrasTotales">{{home.app.totalGeneralRegionCerrado}}</label>  </label>
+                                <canvas id="pieGeneralRegionCerrados"></canvas>
+                            </div>
+                        </div>
+
+                        <div  class="row text-center"  style="padding-top: 55px;">
+                            <div ng-if="home.app.gridClientes == true" ui-grid="gridOptions"></div>
+                        </div>
+                    </div>
+
+                    <div ng-show="home.app.pantalla == 1" class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <label>Proyectos por Tecnología(Region): <label class="letrasTotales">{{home.app.totalTecnologiaTipo}}</label></label>
+                                <canvas id="pieTecnologiaTipo"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div ng-show="home.app.tecno" class="text-center">
+                                <label>Tecnología por tipo {{home.app.label}}: <label class="letrasTotales">{{home.app.totalTecnologiaTipoRegion}}</label></label>
+                                <canvas height="120" id="pieTecnologiaRegion"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div ng-show="home.app.verIdcRegionTipo" class="text-center">
+                                <label>Ingenieros en {{home.app.regionIdc}} ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalTecnologiaIdcRegionTipo}}</label></label>
+                                <canvas height="120" id="pieIdcRegionTipo"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>
