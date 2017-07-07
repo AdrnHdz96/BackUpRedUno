@@ -350,7 +350,7 @@ function traducirStatCodigo($stat) {
         case "INICIO":
             $output = 0;
             break;
-        case "Aceptado":
+        case "ACEPTADO":
             $output = 1;
             break;
         case "PLANEACION":
@@ -359,7 +359,7 @@ function traducirStatCodigo($stat) {
         case "EJECUCION":
             $output = 3;
             break;
-        case "Seguimiento y Control":
+        case "SEGUIMIENTO Y CONTROL":
             $output = 4;
             break;
 
@@ -435,11 +435,11 @@ function traducirStatCodigo($stat) {
             $output = 20000;
             break;
 
-        case "Cierre":
+        case "CIERRE":
             $output = 80000;
             break;
 
-        case "Cancelado":
+        case "CANCELADO":
             $output = 90000;
             break;
 
