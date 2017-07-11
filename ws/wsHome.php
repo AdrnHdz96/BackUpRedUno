@@ -15,28 +15,42 @@ session_start();
 
 switch ($request->accion) {
     case "consultaGeneral":
-        obtenerDatosGenerales();
+        obtenerDatosGenerales($request->fechaInicio, $request->fechaFin);
         break;
     case "consultaGeneralRegion":
-        obtenerDatosGeneralesRegion();
-        break;
-    case "consultaGeneralRegionCerrados":
-        obtenerDatosGeneralesRegionCerrados($request->status);
+        obtenerDatosGeneralesRegion($request->fechaInicio, $request->fechaFin);
         break;
     case "consultaGeneralStatus":
-        obtenerDatosStatus();
+        obtenerDatosStatus($request->fechaInicio, $request->fechaFin);
         break;
+    case "consultaGeneralRegionCerrados":
+        obtenerDatosGeneralesRegionCerrados($request->status, $request->fechaInicio, $request->fechaFin);
+        break;
+    
     case "consultaTecnologiaTipo":
-        consultaTecnologiaTipo();
+        consultaTecnologiaTipo($request->fechaInicio, $request->fechaFin);
         break;
     case "consultaTecnologiaRegion":
-        consultaTecnologiaRegion($request->tipo);
+        consultaTecnologiaRegion($request->tipo,$request->fechaInicio, $request->fechaFin);
         break;
     case "consultaIdcRegionTipo":
-        consultaIdcRegionTipo($request->region, $request->tipo);
+        consultaIdcRegionTipo($request->region, $request->tipo, $request->fechaInicio, $request->fechaFin);
         break;
     case "consultaClientesStatusRegion":
-        consultaClientesStatusRegion($request->status, $request->region);
+        consultaClientesStatusRegion($request->status, $request->region,$request->fechaInicio, $request->fechaFin);
+        break;
+    case "consultaStatusRegionTipo":
+        consultaStatusRegionTipo($request->region, $request->tipo, $request->fechaInicio, $request->fechaFin);
+        break;
+    case "consultaTipoSitios":
+        consultaTipoSitios($request->fechaInicio, $request->fechaFin);
+        break;
+    case "consultaRegionSitios":
+        consultaRegionSitios($request->tipo, $request->fechaInicio, $request->fechaFin);
+        break;
+
+    case "consultaClienteRegion":
+        consultaClienteRegion($request->region, $request->fechaInicio, $request->fechaFin);
         break;
     case "cerrarSesion":
         cerrarSesion();
@@ -46,7 +60,108 @@ switch ($request->accion) {
         break;
 }
 
-function consultaClientesStatusRegion($status, $region) {
+
+
+function consultaClienteRegion($region, $fechaInicio, $fechaFin) {
+    $db = new Sql();
+    $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
+
+    if ($mysqli->connect_errno) {
+        echo "99";
+    } else {
+        
+        $result = $mysqli->query("CALL sp_consultaClienteRegion('$region','$fechaInicio', '$fechaFin')");
+        
+        if ($result->num_rows > 0) {
+            $json = [];
+            while ($row = $result->fetch_assoc()) {
+                $row["status"] = traducirStat($row["status"]);
+                $json[] = $row;
+            }
+            echo json_encode($json);
+        } else {
+            echo '0';
+        }
+        $mysqli->close();
+    }
+}
+
+function consultaRegionSitios($tipo, $fechaInicio, $fechaFin) {
+    $db = new Sql();
+    $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
+
+    if ($mysqli->connect_errno) {
+        echo "99";
+    } else {
+        
+        $result = $mysqli->query("CALL sp_consultaRegionSitios('$tipo','$fechaInicio', '$fechaFin')");
+        
+        if ($result->num_rows > 0) {
+            $json = [];
+            while ($row = $result->fetch_assoc()) {
+                $json[] = $row;
+            }
+            echo json_encode($json);
+        } else {
+            echo '0';
+        }
+        $mysqli->close();
+    }
+}
+
+
+
+function consultaTipoSitios($fechaInicio, $fechaFin) {
+    $db = new Sql();
+    $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
+
+    if ($mysqli->connect_errno) {
+        echo "99";
+    } else {
+        
+        $result = $mysqli->query("CALL sp_consultaTipoSitios('$fechaInicio', '$fechaFin')");
+        
+        if ($result->num_rows > 0) {
+            $json = [];
+            while ($row = $result->fetch_assoc()) {
+                $json[] = $row;
+            }
+            echo json_encode($json);
+        } else {
+            echo '0';
+        }
+        $mysqli->close();
+    }
+}
+
+
+
+function consultaStatusRegionTipo($region, $tipo, $fechaInicio, $fechaFin) {
+    $db = new Sql();
+    $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
+
+    if ($mysqli->connect_errno) {
+        echo "99";
+    } else {
+        
+        $result = $mysqli->query("CALL sp_consultaStatusRegionTipo('$region','$tipo', '$fechaInicio', '$fechaFin')");
+        
+        if ($result->num_rows > 0) {
+            $json = [];
+            while ($row = $result->fetch_assoc()) {
+                $row["status"] = traducirStat($row["status"]);
+                $json[] = $row;
+            }
+            echo json_encode($json);
+        } else {
+            echo '0';
+        }
+        $mysqli->close();
+    }
+}
+
+
+function consultaClientesStatusRegion($status, $region,$fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
@@ -54,10 +169,10 @@ function consultaClientesStatusRegion($status, $region) {
         echo "99";
     } else {
         if ($status == "EJECUCION") {
-            $result = $mysqli->query("CALL sp_consultaClientesStatusRegionEjecucion('$region')");
+            $result = $mysqli->query("CALL sp_consultaClientesStatusRegionEjecucion('$region','$fechaInicio', '$fechaFin')");
         } else {
             $status = traducirStatCodigo($status);
-            $result = $mysqli->query("CALL sp_consultaClientesStatusRegion('$status','$region')");
+            $result = $mysqli->query("CALL sp_consultaClientesStatusRegion('$status','$region', '$fechaInicio', '$fechaFin')");
         }
         if ($result->num_rows > 0) {
             $json = [];
@@ -72,14 +187,14 @@ function consultaClientesStatusRegion($status, $region) {
     }
 }
 
-function consultaIdcRegionTipo($region, $tipo) {
+function consultaIdcRegionTipo($region, $tipo, $fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaIdcRegionTipo('$region','$tipo')");
+        $result = $mysqli->query("CALL sp_consultaIdcRegionTipo('$region','$tipo', '$fechaInicio', '$fechaFin')");
         if ($result->num_rows > 0) {
             $json = [];
             while ($row = $result->fetch_assoc()) {
@@ -93,14 +208,14 @@ function consultaIdcRegionTipo($region, $tipo) {
     }
 }
 
-function consultaTecnologiaTipo() {
+function consultaTecnologiaTipo($fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaTecnologiaTipo()");
+        $result = $mysqli->query("CALL sp_consultaTecnologiaTipo('$fechaInicio', '$fechaFin')");
         if ($result->num_rows > 0) {
             $json = [];
             while ($row = $result->fetch_assoc()) {
@@ -114,14 +229,14 @@ function consultaTecnologiaTipo() {
     }
 }
 
-function consultaTecnologiaRegion($tipo) {
+function consultaTecnologiaRegion($tipo, $fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaTecnologiaRegion('$tipo')");
+        $result = $mysqli->query("CALL sp_consultaTecnologiaRegion('$tipo', '$fechaInicio', '$fechaFin')");
 
         if ($result->num_rows > 0) {
             $json = [];
@@ -151,14 +266,14 @@ function cerrarSesion() {
     }
 }
 
-function obtenerDatosGenerales() {
+function obtenerDatosGenerales($fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaGeneral()");
+        $result = $mysqli->query("CALL sp_consultaGeneral('$fechaInicio','$fechaFin')");
         if ($result->num_rows > 0) {
             $json = [];
             while ($row = $result->fetch_assoc()) {
@@ -172,14 +287,14 @@ function obtenerDatosGenerales() {
     }
 }
 
-function obtenerDatosGeneralesRegion() {
+function obtenerDatosGeneralesRegion($fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaGeneralRegion()");
+        $result = $mysqli->query("CALL sp_consultaGeneralRegion('$fechaInicio','$fechaFin')");
         if ($result->num_rows > 0) {
             $json = [];
             while ($row = $result->fetch_assoc()) {
@@ -193,14 +308,14 @@ function obtenerDatosGeneralesRegion() {
     }
 }
 
-function obtenerDatosStatus() {
+function obtenerDatosStatus($fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
     if ($mysqli->connect_errno) {
         echo "99";
     } else {
-        $result = $mysqli->query("CALL sp_consultaGeneralStatus()");
+        $result = $mysqli->query("CALL sp_consultaGeneralStatus('$fechaInicio','$fechaFin')");
         if ($result->num_rows > 0) {
             $json = [];
             while ($row = $result->fetch_assoc()) {
@@ -215,7 +330,7 @@ function obtenerDatosStatus() {
     }
 }
 
-function obtenerDatosGeneralesRegionCerrados($status) {
+function obtenerDatosGeneralesRegionCerrados($status, $fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
@@ -224,10 +339,10 @@ function obtenerDatosGeneralesRegionCerrados($status) {
         echo "99";
     } else {
         if ($status == "EJECUCION") {
-            $result = $mysqli->query("CALL sp_consultaGeneralRegionCerrados()");
+            $result = $mysqli->query("CALL sp_consultaGeneralRegionCerrados('$fechaInicio','$fechaFin')");
         } else {
             $status = traducirStatCodigo($status);
-            $result = $mysqli->query("CALL sp_consultaGeneralRegionStatus('$status')");
+            $result = $mysqli->query("CALL sp_consultaGeneralRegionStatus('$status','$fechaInicio','$fechaFin')");
         }
         if ($result->num_rows > 0) {
             $json = [];
@@ -248,7 +363,7 @@ function traducirStat($stat) {
             $output = "INICIO";
             break;
         case 1:
-            $output = "Aceptado";
+            $output = "ACEPTADO";
             break;
         case 2:
             $output = "PLANEACION";

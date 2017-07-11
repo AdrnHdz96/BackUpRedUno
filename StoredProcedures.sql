@@ -18,6 +18,34 @@
 --
 -- Dumping routines for database 'wheleph'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaClienteRegion` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClienteRegion`(varRegional varchar(5),fechaInicio varchar(50), fechaFin varchar(50))
+BEGIN
+	SELECT DISTINCT c.nomcte AS nombre, c.rfc, p.status
+	FROM proyectos AS p
+	INNER JOIN clientes AS c
+	ON p.cliente = c.rfc
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+	AND p.regional = varRegional
+     AND (status = '80000'
+		  OR status = '0'
+	)
+    ORDER BY nombre;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_consultaClientesStatusRegion` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -28,13 +56,13 @@
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesStatusRegion`(varStatus varchar(11), varRegional varchar(5))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesStatusRegion`(varStatus varchar(11), varRegional varchar(5), fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT DISTINCT c.nomcte AS nombre, c.rfc
 	FROM proyectos AS p
 	INNER JOIN clientes AS c
 	ON p.cliente = c.rfc
-	WHERE YEAR(fechasol) = YEAR(CURDATE())
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	AND p.status = varStatus
 	AND p.regional = varRegional;
 END ;;
@@ -53,13 +81,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesStatusRegionEjecucion`(varRegional varchar(5))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesStatusRegionEjecucion`(varRegional varchar(5), fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT DISTINCT c.nomcte AS nombre, c.rfc
 	FROM proyectos AS p
 	INNER JOIN clientes AS c
 	ON p.cliente = c.rfc
-	WHERE YEAR(fechasol) = YEAR(CURDATE())
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	AND p.regional = varRegional
     AND (status = '3'
 	OR status = '5'
@@ -98,12 +126,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneral`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneral`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT MONTH(fechasol) as mes, COUNT(1) as totalMes
 	FROM proyectos
 	WHERE fechasol IS NOT NULL
-	AND YEAR(fechasol) = YEAR(CURDATE())
+	AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
     GROUP BY MONTH(fechasol)
     ORDER BY MONTH(fechasol);
     
@@ -123,12 +151,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegion`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegion`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN 
 	SELECT regional as region, count(1) as total
 	FROM proyectos
 	WHERE fechasol IS NOT NULL
-	AND YEAR(fechasol) = YEAR(CURDATE())
+	AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	GROUP BY regional
     ORDER BY regional;
 END ;;
@@ -147,11 +175,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegionCerrados`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegionCerrados`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN 
 	SELECT regional AS region, count(1) as total
 	FROM proyectos
-	WHERE YEAR(fechasol) = YEAR(CURDATE())
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	AND (status = '3'
 	OR status = '5'
 	OR status = '6'
@@ -190,12 +218,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegionStatus`(varStatus varchar(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralRegionStatus`(varStatus varchar(40), fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT regional AS region, count(1) as total
 	FROM proyectos
 	WHERE status = varStatus
-	AND YEAR(fechasol) = YEAR(CURDATE())
+	AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	GROUP BY regional;
 END ;;
 DELIMITER ;
@@ -213,11 +241,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralStatus`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaGeneralStatus`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN 
 	SELECT status, count(1) as total
 	FROM proyectos
-	WHERE YEAR(fechasol) = YEAR(CURDATE())
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	GROUP BY status;
 
 END ;;
@@ -236,14 +264,61 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaIdcRegionTipo`(varRegional varchar(5), varTipo varchar(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaIdcRegionTipo`(varRegional varchar(5), varTipo varchar(40), fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT UPPER(idc) AS nombre, COUNT(1) AS total
 	FROM proyectos
 	WHERE regional = varRegional
 	AND tipo = varTipo
-	AND YEAR(fechasol) = YEAR(CURDATE())
+	AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	GROUP BY idc; 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaRegionSitios` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaRegionSitios`(varTipo varchar(40),fechaInicio varchar(50), fechaFin varchar(50))
+BEGIN
+select UPPER(regional) AS regional, SUM(nositios) AS total
+from proyectos
+where tipo = varTipo
+AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+group by regional;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaStatusRegionTipo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaStatusRegionTipo`(varRegion varchar(5), varTipo varchar(40), fechaInicio varchar(50), fechaFin varchar(50))
+BEGIN
+	SELECT status, count(1) as total
+	FROM proyectos
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+	AND regional = varRegion
+	AND tipo = varTipo
+	GROUP BY status;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -260,11 +335,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTecnologiaRegion`(varTipo VARCHAR(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTecnologiaRegion`(varTipo VARCHAR(40), fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT regional AS region, count(1) as total
 	FROM proyectos
-	WHERE   YEAR(fechasol) = YEAR(CURDATE())
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
     AND tipo = varTipo
 	GROUP BY region
 	ORDER BY region;
@@ -284,13 +359,35 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTecnologiaTipo`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTecnologiaTipo`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 SELECT UPPER(tipo) as tipo, count(1) as total
 FROM proyectos
-WHERE   YEAR(fechasol) = YEAR(CURDATE())
+WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 GROUP BY tipo
 ORDER BY tipo;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaTipoSitios` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTipoSitios`(fechaInicio varchar(50), fechaFin varchar(50))
+BEGIN
+	SELECT UPPER(tipo) AS tipo, SUM(nositios) AS total
+	FROM PROYECTOS
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+	GROUP BY tipo;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -328,4 +425,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-06 18:03:28
+-- Dump completed on 2017-07-10 22:15:30
