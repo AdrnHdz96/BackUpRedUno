@@ -50,7 +50,7 @@ switch ($request->accion) {
         break;
 
     case "consultaClienteRegion":
-        consultaClienteRegion($request->region, $request->fechaInicio, $request->fechaFin);
+        consultaClienteRegion($request->tipo,$request->region, $request->fechaInicio, $request->fechaFin);
         break;
     case "cerrarSesion":
         cerrarSesion();
@@ -62,7 +62,7 @@ switch ($request->accion) {
 
 
 
-function consultaClienteRegion($region, $fechaInicio, $fechaFin) {
+function consultaClienteRegion($tipo,$region, $fechaInicio, $fechaFin) {
     $db = new Sql();
     $mysqli = new mysqli($db->host, $db->user, $db->password, $db->database);
 
@@ -70,7 +70,7 @@ function consultaClienteRegion($region, $fechaInicio, $fechaFin) {
         echo "99";
     } else {
         
-        $result = $mysqli->query("CALL sp_consultaClienteRegion('$region','$fechaInicio', '$fechaFin')");
+        $result = $mysqli->query("CALL sp_consultaClienteRegion('$tipo','$region','$fechaInicio', '$fechaFin')");
         
         if ($result->num_rows > 0) {
             $json = [];

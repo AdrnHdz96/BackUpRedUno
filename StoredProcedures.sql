@@ -28,18 +28,19 @@
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClienteRegion`(varRegional varchar(5),fechaInicio varchar(50), fechaFin varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClienteRegion`(varTipo varchar(40) ,varRegional varchar(5),fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT DISTINCT c.nomcte AS nombre, c.rfc, p.status
-	FROM proyectos AS p
-	INNER JOIN clientes AS c
-	ON p.cliente = c.rfc
-	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
-	AND p.regional = varRegional
-     AND (status = '80000'
-		  OR status = '0'
+FROM clientes AS c
+INNER JOIN proyectos AS p
+ON c.rfc = p.cliente
+WHERE p.tipo = varTipo
+AND p.regional = varRegional
+AND DATE(p.fechasol) BETWEEN fechaInicio AND fechaFin
+ AND (p.status = '80000'
+		  OR p.status = '0'
 	)
-    ORDER BY nombre;
+ORDER BY c.nomcte;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -425,4 +426,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-10 22:15:30
+-- Dump completed on 2017-07-11 17:56:53

@@ -887,6 +887,8 @@ function clickClientesRegion(p,e){
      var params = {};
      params.region = e[0]._view.label;
      controller.app.regionClientesRegion = params.region;
+
+     params.tipo = controller.app.labelRegionSitio;
      params.fechaInicio = controller.app.fechaInicio;
      params.fechaFin = controller.app.fechaFin;
 

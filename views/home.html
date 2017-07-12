@@ -4,220 +4,241 @@ Demo creado por Ernesto Hernández.
 Fecha de creación: 25/06/2017
 -->
 <html ng-app="home">
-    <head>
-        <title>Ingeniería</title>
-        <meta charset="UTF-8">
-        <!--Vendors-->
-        <script type="text/javascript" src="../js/vendors/jQuery.js"></script>       
-        <script type="text/javascript" src="../js/vendors/angular.js"></script>      
-        <script type="text/javascript" src="../js/vendors/angular-animate.js"></script>
-        <script type="text/javascript" src="../js/vendors/angular-strap.js"></script>
-        <script type="text/javascript" src="../js/vendors/angular-strap.tpl.js"></script>
-        <script src="../js/vendors/ui-grid-stable.js" type="text/javascript"></script>
-        <script type="text/javascript" src="../js/vendors/bootstrap.js"></script>       
-        <script type="text/javascript" src="../js/vendors/bootstrap-notify.js" ></script>
-        <script type="text/javascript" src="../js/vendors/Chart.js"></script>
-        <script type="text/javascript" src="../js/vendors/moment.js"></script>
-        <!--App-->        
-        <script type="text/javascript" src="../js/app/home.js" ></script>
-        <link href="../css/app/home.css" rel="stylesheet" type="text/css"/>
-        <!--Css-->        
-        <link href="../css/vendors/ui-grid-stable.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/vendors/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/vendors/animate.css" rel="stylesheet" type="text/css"/>
-        <link href="../css/vendors/simple-sidebar.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body id='main' class="main" ng-controller="indexHome as home">
-        <div ng-show="home.mostrar" class="container-fluid">
+<head>
+    <title>Ingeniería</title>
+    <meta charset="UTF-8">
+    <!--Vendors-->
+    <script type="text/javascript" src="../js/vendors/jQuery.js"></script>       
+    <script type="text/javascript" src="../js/vendors/angular.js"></script>      
+    <script type="text/javascript" src="../js/vendors/angular-animate.js"></script>
+    <script type="text/javascript" src="../js/vendors/angular-strap.js"></script>
+    <script type="text/javascript" src="../js/vendors/angular-strap.tpl.js"></script>
+    <script src="../js/vendors/ui-grid-stable.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/vendors/bootstrap.js"></script>       
+    <script type="text/javascript" src="../js/vendors/bootstrap-notify.js" ></script>
+    <script type="text/javascript" src="../js/vendors/Chart.js"></script>
+    <script type="text/javascript" src="../js/vendors/moment.js"></script>
+    <!--App-->        
+    <script type="text/javascript" src="../js/app/home.js" ></script>
+    <link href="../css/app/home.css" rel="stylesheet" type="text/css"/>
+    <!--Css-->        
+    <link href="../css/vendors/ui-grid-stable.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/vendors/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/vendors/animate.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/vendors/simple-sidebar.css" rel="stylesheet" type="text/css"/>
+</head>
+<body id='main' class="main" ng-controller="indexHome as home">
+    <div ng-show="home.mostrar" class="container-fluid">
 
-            <div id="wrapper" class="toggled">
-                <!-- Sidebar -->
-                <div id="sidebar-wrapper">
-                    <div class="col-md-12 text-center">
-                        <div class="col-md-12" style="padding-top: 15px;">
-                            <label style="font-size: 1.5em; color: white;">Menú</label>
-                        </div>
-                    </div>
-
-                    <div ng-click="home.app.cambioPantalla(0)" id="menuDG" class="col-md-12 text-center menuItem selected">
-                        <div class="col-md-12" style="padding-top: 10px;">
-                            <label class="letrasMenu" style="font-size: 1.5em">Datos Generales</label>
-                        </div>
-                    </div>
-
-                    <div ng-click="home.app.cambioPantalla(1)" id="menuPT"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
-                        <div class="col-md-12" style="padding-top: 10px;">
-                            <label class="letrasMenu" style="font-size: 1.5em">Proyectos por Tecnología</label>
-                        </div>
-                    </div>
-
-                    <div ng-click="home.app.cambioPantalla(2)" id="menuST"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
-                        <div class="col-md-12" style="padding-top: 10px;">
-                            <label class="letrasMenu" style="font-size: 1.5em">Servicios por Tecnología</label>
-                        </div>
-                    </div>
-
-                    <div ng-click="home.app.cambioPantalla(-1)" id="menuConfiguracion"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
-                        <div class="col-md-12" style="padding-top: 10px;">
-                            <label class="letrasMenu" style="font-size: 1.5em">Configuración</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 text-center"  style="margin-top: 480px;">
-                        <img width="180" src="../img/v3m.png">
+        <div id="wrapper" class="toggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <div class="col-md-12 text-center">
+                    <div class="col-md-12" style="padding-top: 15px;">
+                        <label style="font-size: 1.5em; color: white;">Menú</label>
                     </div>
                 </div>
-                <!-- /#sidebar-wrapper -->
 
-                <!-- Page Content -->
-                <div id="page-content-wrapper">
+                <div ng-click="home.app.cambioPantalla(0)" id="menuDG" class="col-md-12 text-center menuItem selected">
+                    <div class="col-md-12" style="padding-top: 10px;">
+                        <label class="letrasMenu" style="font-size: 1.5em">Datos Generales</label>
+                    </div>
+                </div>
 
-                    <nav class="navbar navbar-default">
-                        <div class="container-fluid">
+                <div ng-click="home.app.cambioPantalla(1)" id="menuPT"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
+                    <div class="col-md-12" style="padding-top: 10px;">
+                        <label class="letrasMenu" style="font-size: 1.5em">Proyectos por Tecnología</label>
+                    </div>
+                </div>
 
-                            <div style="padding-top: 15px;" class="navbar-header navbar-left">
-                                <span ng-click="home.app.menu()" class="glyphicon glyphicon-menu-hamburger icono"></span>
-                            </div>
+                <div ng-click="home.app.cambioPantalla(2)" id="menuST"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
+                    <div class="col-md-12" style="padding-top: 10px;">
+                        <label class="letrasMenu" style="font-size: 1.5em">Servicios por Tecnología</label>
+                    </div>
+                </div>
 
-                            <div class="navbar-form navbar-right">                                
-                                <button ng-click="home.app.cerrarSesion()" class="btn btn-primary">Cerrar sesión</button>
-                            </div>
+                <div ng-click="home.app.cambioPantalla(-1)" id="menuConfiguracion"  class="col-md-12 text-center menuItem" style="margin-top: 5px;">
+                    <div class="col-md-12" style="padding-top: 10px;">
+                        <label class="letrasMenu" style="font-size: 1.5em">Configuración</label>
+                    </div>
+                </div>
 
-                            <div style="padding-top: 10px;" class="navbar-form navbar-right">
-                                <span style="color: blue;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                <label>
-                                    {{home.app.datosGenerales.usuario.nombre + " " + home.app.datosGenerales.usuario.apeido}}
-                                </label>
-                            </div>
+                <div class="col-md-12 text-center"  style="margin-top: 480px;">
+                    <img width="180" src="../img/v3m.png">
+                </div>
+            </div>
+            <!-- /#sidebar-wrapper -->
 
-                        </div>
-                    </nav> 
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
 
-                    <div ng-show="home.app.pantalla == 0" class="col-md-12 text-center" id="general">
-                        <div class="row">
-                            <div class="col-md-6 text-center">
-                                <label>Proyectos en el año (Por mes, totales): <label class="letrasTotales">{{home.app.totalGeneral}}</label> </label>
-                                <canvas id="pieGeneral"></canvas>
-                            </div>
-                            <div class="col-md-6 text-center">
-                                <label>Proyectos en el año (Por región, totales): <label class="letrasTotales">{{home.app.totalGeneralRegion}}</label></label>
-                                <canvas id="pieGeneralRegion"></canvas>
-                            </div>
-                        </div>
-                        <div class="row text-center " style="padding-top: 55px;">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
 
-                            <div class="col-md-6 text-center">
-                                <label>Proyectos en el año (Por status, totales): <label class="letrasTotales">{{home.app.totalGeneralStatus}}</label></label>
-                                <canvas id="pieGeneralStatus"></canvas>
-                            </div>
-
-                            <div ng-show="home.app.mostrarRegionStatus == true" class="col-md-6 text-center">
-                                <label>Proyectos en el año (Por región, {{home.app.regionStatus}}): <label class="letrasTotales">{{home.app.totalGeneralRegionCerrado}}</label>  </label>
-                                <canvas id="pieGeneralRegionCerrados"></canvas>
-                            </div>
+                        <div style="padding-top: 15px;" class="navbar-header navbar-left">
+                            <span ng-click="home.app.menu()" class="glyphicon glyphicon-menu-hamburger icono"></span>
                         </div>
 
-                        <div  class="row text-center"  style="padding-top: 55px;"> 
-                            <label ng-if="home.app.gridClientes == true">
-                                Clientes en {{home.app.regionCliente}} ({{home.app.regionStatus}}): 
-                                <label class="letrasTotales">
-                                    {{home.app.clientesTotales}}
-                                </label>  
-                            </label>                               
-                            <div ng-if="home.app.gridClientes == true" ui-grid="gridOptions"></div>
+                        <div class="navbar-form navbar-right">                                
+                            <button ng-click="home.app.cerrarSesion()" class="btn btn-primary">Cerrar sesión</button>
+                        </div>
+
+                        <div style="padding-top: 10px;" class="navbar-form navbar-right">
+                            <span style="color: blue;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            <label>
+                                {{home.app.datosGenerales.usuario.nombre + " " + home.app.datosGenerales.usuario.apeido}}
+                            </label>
+                        </div>
+
+                    </div>
+                </nav> 
+
+                <div ng-show="home.app.pantalla == 0" class="col-md-12 text-center" id="general">
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Periodo {{home.app.fechaInicio}} a {{home.app.fechaFin}}</label>
                         </div>
                     </div>
 
-                    <div ng-show="home.app.pantalla == 1" class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <label>Proyectos por Tecnología(Region): <label class="letrasTotales">{{home.app.totalTecnologiaTipo}}</label></label>
-                                <canvas  height="140" id="pieTecnologiaTipo"></canvas>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                        <label>Proyectos por mes: <label class="letrasTotales">{{home.app.totalGeneral}}</label> </label>
+                            <canvas id="pieGeneral"></canvas>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <label>Proyectos por región: <label class="letrasTotales">{{home.app.totalGeneralRegion}}</label></label>
+                            <canvas id="pieGeneralRegion"></canvas>
+                        </div>
+                    </div>
+                    <div class="row text-center " style="padding-top: 55px;">
+
+                        <div class="col-md-6 text-center">
+                            <label>Proyectos por estatus: <label class="letrasTotales">{{home.app.totalGeneralStatus}}</label></label>
+                            <canvas id="pieGeneralStatus"></canvas>
                         </div>
 
-                        <div class="row">
-                            <div ng-show="home.app.tecno" class="text-center">
-                                <label>Tecnología por tipo {{home.app.label}}: <label class="letrasTotales">{{home.app.totalTecnologiaTipoRegion}}</label></label>
-                                <canvas height="120" id="pieTecnologiaRegion"></canvas>
-                            </div>
-                        </div>
-
-                        <div style="height: 120px;" class="row col-md-12">
-                            <div ng-show="home.app.verIdcRegionTipo" class="col-md-6 text-center">
-                                <label>Ingenieros en {{home.app.regionIdc}} ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalTecnologiaIdcRegionTipo}}</label></label>
-                                <canvas id="pieIdcRegionTipo"></canvas>
-                            </div>
-                            
-                            <div ng-show="home.app.verIdcRegionTipo" class="col-md-6 text-center">
-                                <label>Proyectos en {{home.app.regionIdc}} por estatus ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalStatusRegionTipo}}</label></label>
-                                <canvas id="pieRegionStatusTipo"></canvas>
-                            </div>
-                            
-
-                            
-
-
+                        <div ng-show="home.app.mostrarRegionStatus == true" class="col-md-6 text-center">
+                            <label>Proyectos en {{home.app.regionStatus}} y región: <label class="letrasTotales">{{home.app.totalGeneralRegionCerrado}}</label>  </label>
+                            <canvas id="pieGeneralRegionCerrados"></canvas>
                         </div>
                     </div>
 
-                    <div ng-show="home.app.pantalla == 2" class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <label>Proyectos por Tipo y Sitios: <label class="letrasTotales">{{home.app.totalTipoSitios}}</label></label>
-                                <canvas height="140" id="pieTipoSitios"></canvas>
-                            </div>
+                    <div  class="row text-center"  style="padding-top: 55px;"> 
+                        <label ng-if="home.app.gridClientes == true">
+                            Clientes en {{home.app.regionCliente}} ({{home.app.regionStatus}}): 
+                            <label class="letrasTotales">
+                                {{home.app.clientesTotales}}
+                            </label>  
+                        </label>                               
+                        <div ng-if="home.app.gridClientes == true" ui-grid="gridOptions"></div>
+                    </div>
+                </div>
+
+                <div ng-show="home.app.pantalla == 1" class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Periodo {{home.app.fechaInicio}} a {{home.app.fechaFin}}</label>
                         </div>
-
-                        <div ng-show="home.app.mostrarRegionSitios" class="row">
-                            <div class="col-md-12 text-center">
-                                <label>Proyectos por Región y Sitios ({{home.app.labelRegionSitio}}) <label class="letrasTotales">{{home.app.totalRegionSitios}}</label></label>
-                                <canvas height="140" id="pieRegionSitios"></canvas>
-                            </div>
-                        </div>
-
-                        <div ng-if="home.app.mostrarClientesRegion" class="col-md-12 text-center">
-                                <label>Clientes en {{home.app.regionClientesRegion}} ({{home.app.labelRegionSitio}}): <label class="letrasTotales">{{home.app.totalClientesRegion}}</label></label>
-                                <div ui-grid="gridOptions2"></div>  
-                        </div>                     
-
                     </div>
 
-                     <div ng-show="home.app.pantalla == -1" class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <label style="font-size: 3em;">Configuración</label>
-                            </div>
-                        </div>     
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Proyectos por Tecnología(Region): <label class="letrasTotales">{{home.app.totalTecnologiaTipo}}</label></label>
+                            <canvas  height="140" id="pieTecnologiaTipo"></canvas>
+                        </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <label>Rango de fechas de reporte</label>
-                            </div>
-                        </div>      
+                    <div class="row">
+                        <div ng-show="home.app.tecno" class="text-center">
+                            <label>Tecnología por tipo {{home.app.label}}: <label class="letrasTotales">{{home.app.totalTecnologiaTipoRegion}}</label></label>
+                            <canvas height="120" id="pieTecnologiaRegion"></canvas>
+                        </div>
+                    </div>
 
-                        <div class="row text-center">
-                            <div class="col-md-offset-3 col-md-3"> 
-                                <label>Fecha Inicio</label>
-                                <input ng-change="home.app.prueba()" data-date-type="string" type="text" class="form-control text-center" ng-model="home.app.fechaInicio" bs-datepicker>
-                            </div>
-                            <div class="col-md-3"> 
-                                <label>Fecha Fin</label>
-                                <input ng-change="home.app.prueba()" data-date-type="string" type="text" class="form-control text-center" ng-model="home.app.fechaFin" bs-datepicker>
-                            </div>
-                        </div>         
-
-                         <div class="row" style="padding-top: 25px;">
-                            <div class="col-md-12 text-center">
-                                <button ng-disabled="home.app.deshabilitarBusqueda" ng-click="home.app.buscarTodo()" class="btn btn-primary" style="font-size: 1.3em;">Buscar</button>
-                            </div>
+                    <div style="height: 120px;" class="row col-md-12">
+                        <div ng-show="home.app.verIdcRegionTipo" class="col-md-6 text-center">
+                            <label>Ingenieros en {{home.app.regionIdc}} ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalTecnologiaIdcRegionTipo}}</label></label>
+                            <canvas id="pieIdcRegionTipo"></canvas>
                         </div>
 
+                        <div ng-show="home.app.verIdcRegionTipo" class="col-md-6 text-center">
+                            <label>Proyectos en {{home.app.regionIdc}} por estatus ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalStatusRegionTipo}}</label></label>
+                            <canvas id="pieRegionStatusTipo"></canvas>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+                <div ng-show="home.app.pantalla == 2" class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Periodo {{home.app.fechaInicio}} a {{home.app.fechaFin}}</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Cantidad de Sitios: <label class="letrasTotales">{{home.app.totalTipoSitios}}</label></label>
+                            <canvas height="140" id="pieTipoSitios"></canvas>
+                        </div>
+                    </div>
+
+                    <div ng-show="home.app.mostrarRegionSitios" class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Proyectos por Región y Sitios ({{home.app.labelRegionSitio}}) <label class="letrasTotales">{{home.app.totalRegionSitios}}</label></label>
+                            <canvas height="140" id="pieRegionSitios"></canvas>
+                        </div>
+                    </div>
+
+                    <div ng-if="home.app.mostrarClientesRegion" class="col-md-12 text-center">
+                        <label>Clientes en {{home.app.regionClientesRegion}} ({{home.app.labelRegionSitio}}): <label class="letrasTotales">{{home.app.totalClientesRegion}}</label></label>
+                        <div ui-grid="gridOptions2"></div>  
+                    </div>                     
+
+                </div>
+
+                <div ng-show="home.app.pantalla == -1" class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label style="font-size: 3em;">Configuración</label>
+                        </div>
+                    </div>     
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <label>Rango de fechas de reporte</label>
+                        </div>
+                    </div>      
+
+                    <div class="row text-center">
+                        <div class="col-md-offset-3 col-md-3"> 
+                            <label>Fecha Inicio</label>
+                            <input ng-change="home.app.prueba()" data-date-type="string" type="text" class="form-control text-center" ng-model="home.app.fechaInicio" bs-datepicker>
+                        </div>
+                        <div class="col-md-3"> 
+                            <label>Fecha Fin</label>
+                            <input ng-change="home.app.prueba()" data-date-type="string" type="text" class="form-control text-center" ng-model="home.app.fechaFin" bs-datepicker>
+                        </div>
+                    </div>         
+
+                    <div class="row" style="padding-top: 25px;">
+                        <div class="col-md-12 text-center">
+                            <button ng-disabled="home.app.deshabilitarBusqueda" ng-click="home.app.buscarTodo()" class="btn btn-primary" style="font-size: 1.3em;">Buscar</button>
+                        </div>
                     </div>
 
                 </div>
 
             </div>
+
         </div>
-    </body>
+    </div>
+</body>
 </html>
