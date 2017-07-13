@@ -386,7 +386,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaTipoSitios`(fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
 	SELECT UPPER(tipo) AS tipo, SUM(nositios) AS total
-	FROM PROYECTOS
+	FROM proyectos
 	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
 	GROUP BY tipo;
 END ;;
@@ -426,4 +426,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-11 17:56:53
+-- Dump completed on 2017-07-12 21:05:03
