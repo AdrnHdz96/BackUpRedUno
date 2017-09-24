@@ -30,7 +30,7 @@
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClienteRegion`(varTipo varchar(40) ,varRegional varchar(5),fechaInicio varchar(50), fechaFin varchar(50))
 BEGIN
-	SELECT DISTINCT c.nomcte AS nombre, c.rfc, p.status
+	SELECT c.nomcte AS nombre, c.rfc, p.status, sum(p.nositios) AS nositios
 FROM clientes AS c
 INNER JOIN proyectos AS p
 ON c.rfc = p.cliente
@@ -40,7 +40,62 @@ AND DATE(p.fechasol) BETWEEN fechaInicio AND fechaFin
  AND (p.status = '80000'
 		  OR p.status = '0'
 	)
+    group by c.nomcte
 ORDER BY c.nomcte;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaClientesPorIngeniero` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesPorIngeniero`(varIngeniero varchar(50), fechaInicio varchar(50), fechaFin varchar(50))
+BEGIN
+	select distinct c.nomcte, p.oa
+	from clientes as c
+	inner join proyectos as p
+	on c.rfc = p.cliente
+	where idc = varIngeniero
+    AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+	 AND (p.status = '80000'
+			  OR p.status = '0'
+		);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_consultaClientesPorRegionalTipoStatus` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultaClientesPorRegionalTipoStatus`(varRegional varchar(5), varTipo varchar(40), fechaInicio varchar(50), fechaFin varchar(50), varStatus varchar(50))
+BEGIN
+SELECT  c.nomcte, oa, upper(idc) as ingeniero
+	FROM proyectos
+    INNER JOIN clientes as c
+    on proyectos.cliente = c.rfc
+	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+	AND regional = varRegional
+	AND tipo = varTipo
+    and status = varStatus
+    order by ingeniero;    
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -272,6 +327,7 @@ BEGIN
 	WHERE regional = varRegional
 	AND tipo = varTipo
 	AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+  
 	GROUP BY idc; 
 END ;;
 DELIMITER ;
@@ -295,6 +351,9 @@ select UPPER(regional) AS regional, SUM(nositios) AS total
 from proyectos
 where tipo = varTipo
 AND DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+ AND (status = '80000'
+		  OR status = '0'
+	)
 group by regional;
 END ;;
 DELIMITER ;
@@ -342,6 +401,7 @@ BEGIN
 	FROM proyectos
 	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
     AND tipo = varTipo
+     
 	GROUP BY region
 	ORDER BY region;
 END ;;
@@ -365,6 +425,7 @@ BEGIN
 SELECT UPPER(tipo) as tipo, count(1) as total
 FROM proyectos
 WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+
 GROUP BY tipo
 ORDER BY tipo;
 END ;;
@@ -388,6 +449,9 @@ BEGIN
 	SELECT UPPER(tipo) AS tipo, SUM(nositios) AS total
 	FROM proyectos
 	WHERE DATE(fechasol) BETWEEN fechaInicio AND fechaFin
+     AND (status = '80000'
+		  OR status = '0'
+	)
 	GROUP BY tipo;
 END ;;
 DELIMITER ;
@@ -409,7 +473,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_login`(usuario varchar(15), cont
 BEGIN
 	select id,user,nombre,apeido
     from usuarios
-    where user = usuario AND password = contrasena;
+    where user = usuario AND passpmo = contrasena;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -426,4 +490,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-12 21:05:03
+-- Dump completed on 2017-09-24 15:15:56

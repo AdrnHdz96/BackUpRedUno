@@ -16,7 +16,7 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-            {field: 'nombre', displayName: 'Nombre', enableHiding: false},
+            {cellTooltip:true,field: 'nombre', displayName: 'Nombre', enableHiding: false},
             {field: 'rfc', displayName: 'RFC', enableHiding: false}
             ]
         };
@@ -25,8 +25,28 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-            {field: 'nombre', displayName: 'Nombre', enableHiding: false},
-            {field: 'status', displayName: 'Estatus', enableHiding: false}
+            {cellTooltip:true,field: 'nombre', displayName: 'Nombre', enableHiding: false},
+            {field: 'status', displayName: 'Estatus', enableHiding: false},
+            {field: 'nositios', displayName: 'Núm. Sitios', enableHiding: false}
+            ]
+        };
+
+        $scope.gridOptions3 = {
+            enableFiltering: true,
+            enableColumnMenus: false,
+            columnDefs: [
+            {cellTooltip:true,field: 'nomcte', displayName: 'Nombre', enableHiding: false},
+            {field: 'oa', displayName: 'OA', enableHiding: false}
+            ]
+        };
+
+        $scope.gridOptions4 = {
+            enableFiltering: true,
+            enableColumnMenus: false,
+            columnDefs: [
+            {cellTooltip:true,field: 'nomcte', displayName: 'Nombre', enableHiding: false},
+            {field: 'oa', displayName: 'OA', enableHiding: false},
+            {field: 'ingeniero', displayName: 'Ingeniero', enableHiding: false}
             ]
         };
 
@@ -52,6 +72,8 @@
         controller.app.deshabilitarBusqueda = false;
         controller.app.mostrarRegionSitios = false;
         controller.app.mostrarClientesRegion = false;
+        controller.app.mostrarClientesIngeniero = false; 
+        controller.app.mostrarClientesRegionStatusTipo = false; 
 
         controller.app.datosGenerales = {
             datasets: [{
@@ -715,20 +737,24 @@ function clickIdcRegionTipo(p, e) {
 
                     if (!barIdcRegionTipoCreado) {
                         barIdcRegionTipoCreado = true;
+                        var opt = angular.copy(Chart.defaults.pie);
+                        opt.onClick = clickBuscarClientesIngenieros;
                         controller.app.chartIdcRegionTipo = new Chart(pieIdcRegionTipo, {
                             type: 'pie',
                             data: controller.app.datosGeneralesIdcRegionTipo,
-                            options: Chart.defaults.pie
+                            options: opt
                         });
                     } else {
-                        controller.app.chartIdcRegionTipo.destroy();
-                        controller.app.chartIdcRegionTipo = new Chart(pieIdcRegionTipo, {
-                            type: 'pie',
-                            data: controller.app.datosGeneralesIdcRegionTipo,
-                            options: Chart.defaults.pie
-                        });
-                    }
-                });
+                     var opt = angular.copy(Chart.defaults.pie);
+                     opt.onClick = clickBuscarClientesIngenieros;
+                     controller.app.chartIdcRegionTipo.destroy();
+                     controller.app.chartIdcRegionTipo = new Chart(pieIdcRegionTipo, {
+                        type: 'pie',
+                        data: controller.app.datosGeneralesIdcRegionTipo,
+                        options: opt
+                    });
+                 }
+             });
 
 
                 var params2 = angular.copy(params);
@@ -782,19 +808,23 @@ function clickIdcRegionTipo(p, e) {
                     
 
                     if (!barRegionStatusTipo) {
+                         var opt = angular.copy(Chart.defaults.pie);
+                        opt.onClick = clickClientesRegionStatusTipo;
                         barRegionStatusTipo = true;
                         controller.app.chartStatusRegionTipo = new Chart(pieRegionStatusTipo, {
                             type: 'pie',
                             data: controller.app.datosStatusRegionTipo,
-                            options: Chart.defaults.pie
+                            options: opt
                         });
                     } 
                     else {
+                         var opt = angular.copy(Chart.defaults.pie);
+                        opt.onClick = clickClientesRegionStatusTipo;
                         controller.app.chartStatusRegionTipo.destroy();
                         controller.app.chartStatusRegionTipo = new Chart(pieRegionStatusTipo, {
                             type: 'pie',
                             data: controller.app.datosStatusRegionTipo,
-                            options: Chart.defaults.pie
+                            options: opt
                         });
                     }
 
@@ -903,6 +933,59 @@ function clickClientesRegion(p,e){
         }
     });
  }
+}
+
+function clickBuscarClientesIngenieros(p,e){
+    if (e.length == 1) {    
+        var inge = e[0]._view.label;
+
+        controller.app.mostrarClientesIngeniero = true; 
+        controller.app.mostrarClientesRegionStatusTipo = false; 
+        controller.app.ingenieroCliente = inge;
+
+        var params = {};
+        params.ingeniero = inge;
+        params.fechaInicio = controller.app.fechaInicio;
+        params.fechaFin = controller.app.fechaFin;
+
+        validarSesion().then(function (data) {
+            if (data != "99") {
+                params.accion = "consultaClienteIngeniero";
+                controller.webServiceCall("../ws/wsHome.php", params).then(function (data) {
+                  $scope.gridOptions3.data = data.data;
+              });
+
+            }
+        });
+    }
+}
+
+function clickClientesRegionStatusTipo(p,e){
+if (e.length == 1) {    
+        var status = e[0]._view.label;
+
+        controller.app.mostrarClientesIngeniero = false; 
+        controller.app.mostrarClientesRegionStatusTipo = true; 
+        controller.app.statusClienteTipo = status;
+
+        var params = {};
+        params.status = status;
+        params.fechaInicio = controller.app.fechaInicio;
+        params.fechaFin = controller.app.fechaFin;
+        params.region =  controller.app.regionIdc;
+        params.tipo =  controller.app.label;
+
+        validarSesion().then(function (data) {
+            if (data != "99") {
+                params.accion = "consultaClientesPorRegionalTipoStatus";
+                controller.webServiceCall("../ws/wsHome.php", params).then(function (data) {
+                  $scope.gridOptions4.data = data.data;
+              });
+
+            }
+        });
+    }
+
 }
 
 

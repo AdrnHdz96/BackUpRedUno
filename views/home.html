@@ -131,7 +131,7 @@ Fecha de creación: 25/06/2017
                                 {{home.app.clientesTotales}}
                             </label>  
                         </label>                               
-                        <div ng-if="home.app.gridClientes == true" ui-grid="gridOptions"></div>
+                        <div ng-if="home.app.gridClientes == true" ui-grid="gridOptions"  ui-grid-auto-resize></div>
                     </div>
                 </div>
 
@@ -167,11 +167,20 @@ Fecha de creación: 25/06/2017
                             <label>Proyectos en {{home.app.regionIdc}} por estatus ({{home.app.label}}): <label class="letrasTotales">{{home.app.totalStatusRegionTipo}}</label></label>
                             <canvas id="pieRegionStatusTipo"></canvas>
                         </div>
+                    </div>
 
 
-
-
-
+                    <div ng-if="home.app.mostrarClientesIngeniero" class="row text-center"  style="padding-top: 500px;">
+                        <label>
+                            Clientes por Ingeniero {{home.app.ingenieroCliente}}
+                        </label>
+                          <div ui-grid="gridOptions3"  ui-grid-auto-resize></div>
+                    </div>
+                    <div ng-if="home.app.mostrarClientesRegionStatusTipo" class="row text-center"  style="padding-top: 500px;">
+                        <label>
+                            Clientes en {{home.app.regionIdc}} por estatus ({{home.app.statusClienteTipo}}) de tipo ({{home.app.label}}): 
+                        </label>
+                          <div ui-grid="gridOptions4"  ui-grid-auto-resize></div>
                     </div>
                 </div>
 
@@ -185,7 +194,7 @@ Fecha de creación: 25/06/2017
 
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <label>Cantidad de Sitios: <label class="letrasTotales">{{home.app.totalTipoSitios}}</label></label>
+                            <label>Cantidad de Servicios: <label class="letrasTotales">{{home.app.totalTipoSitios}}</label></label>
                             <canvas height="140" id="pieTipoSitios"></canvas>
                         </div>
                     </div>
@@ -199,7 +208,7 @@ Fecha de creación: 25/06/2017
 
                     <div ng-if="home.app.mostrarClientesRegion" class="col-md-12 text-center">
                         <label>Clientes en {{home.app.regionClientesRegion}} ({{home.app.labelRegionSitio}}): <label class="letrasTotales">{{home.app.totalClientesRegion}}</label></label>
-                        <div ui-grid="gridOptions2"></div>  
+                        <div ui-grid="gridOptions2"  ui-grid-auto-resize></div>  
                     </div>                     
 
                 </div>
